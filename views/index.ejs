@@ -1,13 +1,10 @@
-<!-- views/main.ejs -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><%= title || 'Proyecto' %></title>
-  <!-- Google Fonts -->
+  <title><%= typeof title !== 'undefined' ? title : 'Proyecto' %></title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&display=swap" rel="stylesheet">
-  <!-- CSS Externo -->
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -16,14 +13,23 @@
       <ul>
         <li><a href="/">Inicio</a></li>
         <li><a href="/usuarios">Usuarios</a></li>
-        <li><a href="#">Servicios</a></li>
-        <li><a href="#">Contacto</a></li>
+        <li><a href="/servicios">Servicios</a></li>
+        <li><a href="/contacto">Contacto</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container">
-    <%- body %>
+    <% if (typeof usuarios !== 'undefined' && usuarios.length > 0) { %>
+      <h1>Lista de Usuarios</h1>
+      <ul>
+        <% usuarios.forEach(function(usuario) { %>
+          <li><%= usuario.Nombre %> <%= usuario.Apellido1 %> (<%= usuario.Correo %>)</li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No hay usuarios disponibles.</p>
+    <% } %>
   </main>
 
   <footer>
@@ -32,7 +38,6 @@
     </div>
   </footer>
 
-  <!-- JavaScript Externo -->
   <script src="/js/script.js"></script>
 </body>
 </html>
