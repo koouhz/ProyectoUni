@@ -4,7 +4,7 @@ const router = express.Router();
 const conexion = require('../Public/connection');
 
 router.get('/usuarios', (req, res) => {
-    const sql = 'SELECT * FROM TUsuarios';
+    const sql = 'SELECT nombre FROM TUsuarios';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error('Error al consultar TUsuarios:', err);
