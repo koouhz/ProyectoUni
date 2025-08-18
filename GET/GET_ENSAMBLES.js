@@ -4,7 +4,7 @@ const router = express.Router();
 const conexion = require('../Public/connection');
 
 router.get('/ensambles', (req, res) => {
-    const sql = 'SELECT * FROM TEnsambles';
+    const sql = 'SELECT FechaInicio, FechaFin FROM TEnsambles';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error('Error al consultar TEnsambles:', err);
