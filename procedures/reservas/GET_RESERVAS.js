@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const conexion = require('../Public/connection');
+const conexion = require('../../config/connection');
 
 router.get('/reservas', (req, res) => {
     const sql = 'SELECT * FROM TReservas';

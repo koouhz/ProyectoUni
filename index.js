@@ -2,17 +2,17 @@ const express = require('express');
 const app = express();
 const puerto = 3000;
 
-const getRolesRouter = require('./GET/GET_ROLES');
-const getUsuariosRouter = require('./GET/GET_USUARIOS');
-const getCategoriasRouter = require('./GET/GET_CATEGORIAS');
-const getProductosRouter = require('./GET/GET_COMPONENTES');
-const getComputadorasRouter = require('./GET/GET_COMPUTADORAS');
-const getEnsamblesRouter = require('./GET/GET_ENSAMBLES');
-const getDetalleEnsambleRouter = require('./GET/GET_DETALLE_ENSAMBLE');
-const getMantenimientosRouter = require('./GET/GET_MANTENIMIENTOS');
-const getDetalleMantenimientoRouter = require('./GET/GET_DETALLE_MANTENIMIENTO');
-const getReservasRouter = require('./GET/GET_RESERVAS');
-const getDetalleReservaRouter = require('./GET/GET_DETALLE_RESERVA')
+const getRolesRouter = require('./procedures/roles/GET_ROLES');
+const getUsuariosRouter = require('./procedures/usuarios/GET_USUARIOS');
+const getCategoriasRouter = require('./procedures/categorias/GET_CATEGORIAS');
+const getProductosRouter = require('./procedures/componentes/GET_COMPONENTES');
+const getComputadorasRouter = require('./procedures/computadoras/GET_COMPUTADORAS');
+const getEnsamblesRouter = require('./procedures/ensambles/GET_ENSAMBLES');
+const getDetalleEnsambleRouter = require('./procedures/detalle_ensamble/GET_DETALLE_ENSAMBLE');
+const getMantenimientosRouter = require('./procedures/mantenimientos/GET_MANTENIMIENTOS');
+const getDetalleMantenimientoRouter = require('./procedures/detalle_mantenimiento/GET_DETALLE_MANTENIMIENTO');
+const getReservasRouter = require('./procedures/reservas/GET_RESERVAS');
+const getDetalleReservaRouter = require('./procedures/detalle_reserva/GET_DETALLE_RESERVA')
 
 app.use('/Proyecto', getRolesRouter);
 app.use('/Proyecto', getUsuariosRouter);
