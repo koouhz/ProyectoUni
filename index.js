@@ -26,6 +26,6 @@ app.use('/Proyecto', getDetalleMantenimientoRouter);
 app.use('/Proyecto', getReservasRouter);
 app.use('/Proyecto', getDetalleReservaRouter);
 
-app.listen(puerto, () => {
+app.listen(puerto, '0.0.0.0', () => {
     console.log('Servidor levantado en puerto ' + puerto);
 });
