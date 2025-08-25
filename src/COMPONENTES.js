@@ -3,7 +3,7 @@ const router = express.Router();
 const conexion = require('./config/connection');
 
 router.get('/Componentes', (req, res) => {
-    const sql = 'SELECT * FROM TComponentes WHERE estado = 1';
+    const sql = "SELECT * FROM TComponentes WHERE estado = 'A'";
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error("Error al consultar TComponentes:", err);
@@ -24,7 +24,7 @@ router.post('/Componentes', (req, res) => {
         stockdanado: stockdanado || 0,
         stockenuso: stockenuso || 0,
         stockusado: stockusado || 0,
-        estado: 1,
+        estado: 'A',
         fecharegistro: new Date()
     };
 
@@ -65,7 +65,7 @@ router.put('/Componentes/:id', (req, res) => {
 
 router.delete('/Componentes/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TComponentes SET estado = 0 WHERE idcomponente = ?';
+    const sql = "UPDATE TComponentes SET estado = 'C' WHERE idcomponente = ?";
     conexion.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Error al eliminar componente:", err);

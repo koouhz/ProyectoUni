@@ -12,14 +12,11 @@ router.get('/usuarios', (req, res) => {
 
 router.post('/usuarios', (req, res) => {
     const { idrol, nombre, apellido1, correo, contrasena, estado } = req.body;
-    const data = { idrol, nombre, apellido1, correo, contrasena, estado };
+    const data = { idrol, nombre, apellido1, correo, contrasena, estado, estado_logico: 1 };
     const sqlInsert = 'INSERT INTO TUsuarios SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
         if (err) return res.status(500).send('Error al insertar usuario');
-        res.json({ 
-            message: 'Usuario agregado correctamente', 
-            id: result.insertId 
-        });
+        res.json({ message: 'Usuario agregado correctamente', id: result.insertId });
     });
 });
 
@@ -35,7 +32,7 @@ router.put('/usuarios/:id', (req, res) => {
 
 router.delete('/usuarios/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TUsuarios SET estado = 0 WHERE idusuario = ?';
+    const sql = 'UPDATE TUsuarios SET estado_logico = 0 WHERE idusuario = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar usuario');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Usuario no encontrado' });

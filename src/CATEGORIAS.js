@@ -3,7 +3,7 @@ const router = express.Router();
 const conexion = require('./config/connection');
 
 router.get('/Categorias', (req, res) => {
-    const sql = 'SELECT * FROM TCategorias WHERE estado = 1';
+    const sql = 'SELECT * FROM TCategorias WHERE EstadoLogico = 1';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error("Error en SELECT categorias:", err);
@@ -17,9 +17,10 @@ router.post('/Categorias', (req, res) => {
     const { nombre } = req.body;
 
     const data = {
-        nombre: nombre,
-        estado: 1,
-        fecharegistro: new Date()
+        Nombre: nombre,
+        Estado: 1,
+        EstadoLogico: 1,
+        FechaRegistro: new Date()
     };
 
     const sqlInsert = 'INSERT INTO TCategorias SET ?';
@@ -41,14 +42,14 @@ router.post('/Categorias', (req, res) => {
 router.put('/Categorias/:id', (req, res) => {
     const id = req.params.id;
     const { nombre } = req.body;
-    const sql = 'UPDATE TCategorias SET nombre = ? WHERE idcategoria = ?';
+    const sql = 'UPDATE TCategorias SET Nombre = ? WHERE IdCategoria = ? AND EstadoLogico = 1';
     conexion.query(sql, [nombre, id], (err, result) => {
         if (err) {
             console.error("Error en UPDATE categoria:", err);
             return res.status(500).send("Error en el servidor");
         }
         if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "Categoría no encontrada" });
+            return res.status(404).json({ message: "Categoría no encontrada o eliminada" });
         }
         res.json({ message: "Categoría actualizada correctamente" });
     });
@@ -56,7 +57,7 @@ router.put('/Categorias/:id', (req, res) => {
 
 router.delete('/Categorias/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TCategorias SET estado = 0 WHERE idcategoria = ?';
+    const sql = 'UPDATE TCategorias SET EstadoLogico = 0 WHERE IdCategoria = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Error en DELETE logico categoria:", err);

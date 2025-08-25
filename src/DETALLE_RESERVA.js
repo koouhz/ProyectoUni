@@ -2,44 +2,48 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('./config/connection');
 
-router.get('/detalle_reserva', (req, res) => {
-    const sql = 'SELECT * FROM TDetalleReserva';
+router.get('/reservas', (req, res) => {
+    const sql = 'SELECT * FROM TReservas';
     conexion.query(sql, (err, result) => {
-        if (err) return res.status(500).send('Error en la consulta de TDetalleReserva');
+        if (err) return res.status(500).send('Error en la consulta de TReservas');
         res.json(result);
     });
 });
 
-router.post('/detalle_reserva', (req, res) => {
-    const { idreserva, idcomponente } = req.body;
-    const data = { idreserva, idcomponente };
-    const sqlInsert = 'INSERT INTO TDetalleReserva SET ?';
+router.post('/reservas', (req, res) => {
+    const { idusuario, fecha, descripcion, estado } = req.body;
+    const data = { idusuario, fecha, descripcion, estado };
+    const sqlInsert = 'INSERT INTO TReservas SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
-        if (err) return res.status(500).send('Error al insertar detalle de reserva');
+        if (err) return res.status(500).send('Error al insertar reserva');
         res.json({ 
-            message: 'Detalle de reserva agregado correctamente', 
+            message: 'Reserva agregada correctamente', 
             id: result.insertId 
         });
     });
 });
 
-router.put('/detalle_reserva/:id', (req, res) => {
+router.put('/reservas/:id', (req, res) => {
     const id = req.params.id;
-    const { idreserva, idcomponente } = req.body;
-    const sql = 'UPDATE TDetalleReserva SET idreserva = ?, idcomponente = ? WHERE iddetalle = ?';
-    conexion.query(sql, [idreserva, idcomponente, id], (err) => {
-        if (err) return res.status(500).send('Error al actualizar detalle de reserva');
-        res.json({ message: 'Detalle de reserva actualizado correctamente' });
+    const { idusuario, fecha, descripcion, estado } = req.body;
+    const sql = `
+        UPDATE TReservas 
+        SET idusuario = ?, fecha = ?, descripcion = ?, estado = ?
+        WHERE idreserva = ?
+    `;
+    conexion.query(sql, [idusuario, fecha, descripcion, estado, id], (err) => {
+        if (err) return res.status(500).send('Error al actualizar reserva');
+        res.json({ message: 'Reserva actualizada correctamente' });
     });
 });
 
-router.delete('/detalle_reserva/:id', (req, res) => {
+router.delete('/reservas/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TDetalleReserva SET estado = 0 WHERE iddetalle = ?';
+    const sql = 'UPDATE TReservas SET estado = 0 WHERE idreserva = ?';
     conexion.query(sql, [id], (err, result) => {
-        if (err) return res.status(500).send('Error al eliminar detalle de reserva');
-        if (result.affectedRows === 0) return res.status(404).json({ message: 'Detalle de reserva no encontrado' });
-        res.json({ message: 'Detalle de reserva eliminado (borrado lógico)' });
+        if (err) return res.status(500).send('Error al eliminar reserva');
+        if (result.affectedRows === 0) return res.status(404).json({ message: 'Reserva no encontrada' });
+        res.json({ message: 'Reserva eliminada (borrado lógico)' });
     });
 });
 

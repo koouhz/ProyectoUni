@@ -1,12 +1,9 @@
-diseño url: /proyecto/{}
-
-proyecto/categorias
 {
   "nombre": "Tarjetas Gráficas",
-  "descripcion": "Componentes relacionados con GPUs y aceleradores gráficos"
+  "descripcion": "Componentes relacionados con GPUs y aceleradores gráficos",
+  "estado": 1
 }
 
-proyecto/componentes
 {
   "idcategoria": 1,
   "nombre": "NVIDIA RTX 4070 Ti",
@@ -14,34 +11,34 @@ proyecto/componentes
   "costounitario": 850.50,
   "stockdanado": 1,
   "stockenuso": 2,
-  "stockusado": 0
+  "stockusado": 0,
+  "estado": 1
 }
 
-proyecto/computadoras
 {
   "idusuario": 1,
-  "nombre": "PC Gamer Ryzen 9"
+  "nombre": "PC Gamer Ryzen 9",
+  "estado": 1
 }
 
-proyecto/detalleensamble
 {
   "idensamble": 1,
-  "idcomponente": 2
+  "idcomponente": 2,
+  "estado": 1
 }
 
-proyecto/detallemantenimiento
 {
   "idmantenimiento": 1,
-  "idcomponente": 2
+  "idcomponente": 2,
+  "estado": 1
 }
 
-proyecto/detalleresrvas
 {
   "idreserva": 1,
-  "idcomponente": 3
+  "idcomponente": 3,
+  "estado": 1
 }
 
-proyecto/ensambles
 {
   "idusuariotecnico": 2,
   "idusuariocliente": 1,
@@ -50,7 +47,6 @@ proyecto/ensambles
   "estado": "P"
 }
 
-proyecto/mantenimientos
 {
   "idcomputadora": 1,
   "idusuario": 2,
@@ -60,7 +56,6 @@ proyecto/mantenimientos
   "estado": "P"
 }
 
-proyecto/reservas
 {
   "idusuario": 1,
   "fechareserva": "2025-08-25",
@@ -68,18 +63,16 @@ proyecto/reservas
   "estado": "P"
 }
 
-proyecto/roles
 {
   "nombre": "Administrador",
-  "estadologico": true
+  "estado": 1
 }
 
-proyecto/usuarios
 {
   "idrol": 1,
   "nombre": "Juan",
   "apellido1": "Pérez",
   "correo": "juan.cliente@example.com",
   "contrasena": "cliente123",
-  "estadologico": true
+  "estado": 1
 }
