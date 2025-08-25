@@ -3,17 +3,17 @@ const app = express();
 app.use(express.json());
 const puerto = 3000;
 
-const getRolesRouter = require('./src/ROLES');
-const getUsuariosRouter = require('./src/USUARIOS');
-const getCategoriasRouter = require('./src/CATEGORIAS');
-const getProductosRouter = require('./src/COMPONENTES');
-const getComputadorasRouter = require('./src/COMPUTADORAS');
-const getEnsamblesRouter = require('./src/ENSAMBLES');
-const getDetalleEnsambleRouter = require('./src/DETALLE_ENSAMBLE');
-const getMantenimientosRouter = require('./src/MANTENIMIENTOS');
-const getDetalleMantenimientoRouter = require('./src/DETALLE_MANTENIMIENTO');
-const getReservasRouter = require('./src/RESERVAS');
-const getDetalleReservaRouter = require('./src/DETALLE_RESERVA')
+const getRolesRouter = require('./src/roles');
+const getUsuariosRouter = require('./src/usuarios');
+const getCategoriasRouter = require('./src/categorias');
+const getProductosRouter = require('./src/componentes');
+const getComputadorasRouter = require('./src/computadoras');
+const getEnsamblesRouter = require('./src/ensambles');
+const getDetalleEnsambleRouter = require('./src/detalle_ensamble');
+const getMantenimientosRouter = require('./src/mantenimientos');
+const getDetalleMantenimientoRouter = require('./src/detalle_mantenimiento');
+const getReservasRouter = require('./src/reservas');
+const getDetalleReservaRouter = require('./src/detalle_reserva')
 
 app.use('/Proyecto', getRolesRouter);
 app.use('/Proyecto', getUsuariosRouter);
