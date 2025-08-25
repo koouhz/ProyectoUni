@@ -3,7 +3,7 @@ const router = express.Router();
 const conexion = require('./config/connection');
 
 router.get('/DetalleEnsamble', (req, res) => {
-    const sql = 'SELECT * FROM TDetalleEnsamble WHERE estado = 1';
+    const sql = 'SELECT * FROM TDetalleEnsamble WHERE Estado = 1';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error("Error al consultar TDetalleEnsamble:", err);
@@ -15,12 +15,14 @@ router.get('/DetalleEnsamble', (req, res) => {
 
 router.post('/DetalleEnsamble', (req, res) => {
     const { idensamble, idcomponente } = req.body;
+
     const data = {
-        idensamble,
-        idcomponente,
-        estado: 1,
-        fecharegistro: new Date()
+        IdEnsamble: idensamble,
+        IdComponente: idcomponente,
+        Estado: 1,
+        EstadoLogico: 1
     };
+
     const sqlInsert = 'INSERT INTO TDetalleEnsamble SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
         if (err) {
@@ -34,10 +36,11 @@ router.post('/DetalleEnsamble', (req, res) => {
     });
 });
 
+
 router.put('/DetalleEnsamble/:id', (req, res) => {
     const id = req.params.id;
     const { idensamble, idcomponente } = req.body;
-    const sql = 'UPDATE TDetalleEnsamble SET idensamble = ?, idcomponente = ? WHERE iddetalle = ?';
+    const sql = 'UPDATE TDetalleEnsamble SET IdEnsamble = ?, IdComponente = ? WHERE IdDetalle = ?';
     conexion.query(sql, [idensamble, idcomponente, id], (err, result) => {
         if (err) {
             console.error("Error al actualizar detalle de ensamble:", err);
@@ -52,7 +55,7 @@ router.put('/DetalleEnsamble/:id', (req, res) => {
 
 router.delete('/DetalleEnsamble/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TDetalleEnsamble SET estado = 0 WHERE iddetalle = ?';
+    const sql = 'UPDATE TDetalleEnsamble SET Estado = 0 WHERE IdDetalle = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Error al eliminar detalle de ensamble:", err);

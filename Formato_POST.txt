@@ -1,73 +1,79 @@
+Categorias
 {
   "nombre": "Tarjetas Gráficas",
   "descripcion": "Componentes relacionados con GPUs y aceleradores gráficos",
   "estado": 1
 }
 
+Componentes
 {
-  "idcategoria": 1,
+  "idcategoria": 2,
   "nombre": "NVIDIA RTX 4070 Ti",
   "stockdisponible": 10,
   "costounitario": 850.50,
   "stockdanado": 1,
   "stockenuso": 2,
-  "stockusado": 0,
-  "estado": 1
+  "stockusado": 0
 }
 
+Computadoras
 {
   "idusuario": 1,
-  "nombre": "PC Gamer Ryzen 9",
-  "estado": 1
+  "nombre": "PC Gamer Ryzen 9"
 }
 
+Detalle_Ensamble
 {
   "idensamble": 1,
-  "idcomponente": 2,
-  "estado": 1
+  "idcomponente": 3
 }
 
+Detalle_Mantenimiento
 {
-  "idmantenimiento": 1,
-  "idcomponente": 2,
-  "estado": 1
+  "IdMantenimiento": 1,
+  "IdComponente": 5,
+  "Estado": 1
 }
 
+Detalle_Reservas
 {
-  "idreserva": 1,
-  "idcomponente": 3,
-  "estado": 1
+  "IdReserva": 1,
+  "IdComponente": 3,
+  "Estado": 1
 }
 
+Ensambles
 {
-  "idusuariotecnico": 2,
-  "idusuariocliente": 1,
-  "fechafin": "2025-08-30 14:00:00",
-  "costototal": 500.00,
-  "estado": "P"
+  "IdEnsamble": 1,
+  "IdComponente": 3
 }
 
+Mantenimiento
 {
-  "idcomputadora": 1,
-  "idusuario": 2,
-  "fechaprogramada": "2025-08-25",
-  "fecharealizada": null,
-  "costototal": 120.00,
-  "estado": "P"
+  "IdComputadora": 1,
+  "IdUsuario": 2,
+  "FechaProgramada": "2025-08-25",
+  "FechaRealizada": null,
+  "CostoTotal": 120.00,
+  "Estado": "P"
 }
 
+Reservas
 {
-  "idusuario": 1,
-  "fechareserva": "2025-08-25",
-  "pago": 330.00,
-  "estado": "P"
+  "IdUsuario": 1,
+  "FechaReserva": "2025-08-25",
+  "Pago": 400.00,
+  "Estado": "P"
 }
 
+Roles
 {
-  "nombre": "Administrador",
-  "estado": 1
+  "Nombre": "Administrador",
+  "Estado": 1
 }
 
+
+Usuarios
 {
   "idrol": 1,
   "nombre": "Juan",

@@ -11,8 +11,8 @@ router.get('/mantenimientos', (req, res) => {
 });
 
 router.post('/mantenimientos', (req, res) => {
-    const { idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado } = req.body;
-    const data = { idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado_logico: 1, estado };
+    const { IdComputadora, IdUsuario, FechaProgramada, FechaRealizada, CostoTotal, Estado } = req.body;
+    const data = { IdComputadora, IdUsuario, FechaProgramada, FechaRealizada, CostoTotal, Estado, EstadoLogico: 1 };
     const sqlInsert = 'INSERT INTO TMantenimientos SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
         if (err) return res.status(500).send('Error al insertar mantenimiento');
@@ -22,9 +22,9 @@ router.post('/mantenimientos', (req, res) => {
 
 router.put('/mantenimientos/:id', (req, res) => {
     const id = req.params.id;
-    const { idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado } = req.body;
-    const sql = 'UPDATE TMantenimientos SET idcomputadora = ?, idusuario = ?, fechaprogramada = ?, fecharealizada = ?, costototal = ?, estado = ? WHERE idmantenimiento = ?';
-    conexion.query(sql, [idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado, id], (err) => {
+    const { IdComputadora, IdUsuario, FechaProgramada, FechaRealizada, CostoTotal, Estado } = req.body;
+    const sql = 'UPDATE TMantenimientos SET IdComputadora = ?, IdUsuario = ?, FechaProgramada = ?, FechaRealizada = ?, CostoTotal = ?, Estado = ? WHERE IdMantenimiento = ?';
+    conexion.query(sql, [IdComputadora, IdUsuario, FechaProgramada, FechaRealizada, CostoTotal, Estado, id], (err) => {
         if (err) return res.status(500).send('Error al actualizar mantenimiento');
         res.json({ message: 'Mantenimiento actualizado correctamente' });
     });
@@ -32,7 +32,7 @@ router.put('/mantenimientos/:id', (req, res) => {
 
 router.delete('/mantenimientos/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TMantenimientos SET estado_logico = 0 WHERE idmantenimiento = ?';
+    const sql = 'UPDATE TMantenimientos SET EstadoLogico = 0 WHERE IdMantenimiento = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar mantenimiento');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Mantenimiento no encontrado' });

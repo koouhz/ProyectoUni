@@ -2,48 +2,73 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('./config/connection');
 
-router.get('/mantenimientos', (req, res) => {
-    const sql = 'SELECT * FROM TMantenimientos';
+router.get('/detallemantenimientos', (req, res) => {
+    const sql = 'SELECT * FROM TDetalleMantenimiento WHERE EstadoLogico = 1';
     conexion.query(sql, (err, result) => {
-        if (err) return res.status(500).send('Error en la consulta de TMantenimientos');
+        if (err) {
+            console.error("Error al consultar TDetalleMantenimiento:", err);
+            return res.status(500).send("Error en la consulta de TDetalleMantenimiento");
+        }
         res.json(result);
     });
 });
 
-router.post('/mantenimientos', (req, res) => {
-    const { idcomputadora, fecha, descripcion, estado } = req.body;
-    const data = { idcomputadora, fecha, descripcion, estado };
-    const sqlInsert = 'INSERT INTO TMantenimientos SET ?';
+router.post('/detallemantenimientos', (req, res) => {
+    const { IdMantenimiento, IdComponente, Estado } = req.body;
+
+    const data = {
+        IdMantenimiento,
+        IdComponente,
+        Estado: Estado || 1,
+        EstadoLogico: 1
+    };
+
+    const sqlInsert = 'INSERT INTO TDetalleMantenimiento SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
-        if (err) return res.status(500).send('Error al insertar mantenimiento');
+        if (err) {
+            console.error("Error al insertar detalle de mantenimiento:", err);
+            return res.status(500).send("Error al insertar detalle de mantenimiento");
+        }
         res.json({ 
-            message: 'Mantenimiento agregado correctamente', 
+            message: "Detalle de mantenimiento agregado correctamente", 
             id: result.insertId 
         });
     });
 });
 
-router.put('/mantenimientos/:id', (req, res) => {
+
+router.put('/detallemantenimientos/:id', (req, res) => {
     const id = req.params.id;
-    const { idcomputadora, fecha, descripcion, estado } = req.body;
+    const { IdMantenimiento, IdComponente, Estado } = req.body;
     const sql = `
-        UPDATE TMantenimientos 
-        SET idcomputadora = ?, fecha = ?, descripcion = ?, estado = ? 
-        WHERE idmantenimiento = ?
+        UPDATE TDetalleMantenimiento
+        SET IdMantenimiento = ?, IdComponente = ?, Estado = ?
+        WHERE IdDetalle = ?
     `;
-    conexion.query(sql, [idcomputadora, fecha, descripcion, estado, id], (err) => {
-        if (err) return res.status(500).send('Error al actualizar mantenimiento');
-        res.json({ message: 'Mantenimiento actualizado correctamente' });
+    conexion.query(sql, [IdMantenimiento, IdComponente, Estado, id], (err, result) => {
+        if (err) {
+            console.error("Error al actualizar detalle de mantenimiento:", err);
+            return res.status(500).send("Error al actualizar detalle de mantenimiento");
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Detalle de mantenimiento no encontrado" });
+        }
+        res.json({ message: "Detalle de mantenimiento actualizado correctamente" });
     });
 });
 
-router.delete('/mantenimientos/:id', (req, res) => {
+router.delete('/detallemantenimientos/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TMantenimientos SET estado = "C" WHERE idmantenimiento = ?';
+    const sql = 'UPDATE TDetalleMantenimiento SET EstadoLogico = 0 WHERE IdDetalle = ?';
     conexion.query(sql, [id], (err, result) => {
-        if (err) return res.status(500).send('Error al eliminar mantenimiento');
-        if (result.affectedRows === 0) return res.status(404).json({ message: 'Mantenimiento no encontrado' });
-        res.json({ message: 'Mantenimiento eliminado (borrado lógico)' });
+        if (err) {
+            console.error("Error al eliminar detalle de mantenimiento:", err);
+            return res.status(500).send("Error al eliminar detalle de mantenimiento");
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Detalle de mantenimiento no encontrado" });
+        }
+        res.json({ message: "Detalle de mantenimiento eliminado (borrado lógico)" });
     });
 });
 

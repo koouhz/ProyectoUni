@@ -30,11 +30,9 @@ router.post('/Categorias', (req, res) => {
             return res.status(500).send("Error en el servidor");
         }
 
-        const nuevoId = result.insertId;
-
         res.json({ 
             message: "Categoría agregada correctamente",
-            id: nuevoId 
+            id: result.insertId 
         });
     });
 });
@@ -42,6 +40,7 @@ router.post('/Categorias', (req, res) => {
 router.put('/Categorias/:id', (req, res) => {
     const id = req.params.id;
     const { nombre } = req.body;
+
     const sql = 'UPDATE TCategorias SET Nombre = ? WHERE IdCategoria = ? AND EstadoLogico = 1';
     conexion.query(sql, [nombre, id], (err, result) => {
         if (err) {

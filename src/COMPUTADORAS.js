@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('./config/connection');
 
+// Obtener todas las computadoras activas
 router.get('/Computadoras', (req, res) => {
-    const sql = 'SELECT * FROM TComputadoras WHERE estado = 1';
+    const sql = 'SELECT * FROM TComputadoras WHERE Estado = 1';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error("Error al consultar TComputadoras:", err);
@@ -15,12 +16,15 @@ router.get('/Computadoras', (req, res) => {
 
 router.post('/Computadoras', (req, res) => {
     const { idusuario, nombre } = req.body;
+
     const data = {
-        idusuario,
-        nombre,
-        estado: 1,
-        fecharegistro: new Date()
+        IdUsuario: idusuario,
+        Nombre: nombre,
+        Estado: 1,
+        EstadoLogico: 1,
+        FechaRegistro: new Date()
     };
+
     const sqlInsert = 'INSERT INTO TComputadoras SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
         if (err) {
@@ -34,10 +38,11 @@ router.post('/Computadoras', (req, res) => {
     });
 });
 
+
 router.put('/Computadoras/:id', (req, res) => {
     const id = req.params.id;
     const { idusuario, nombre } = req.body;
-    const sql = 'UPDATE TComputadoras SET idusuario = ?, nombre = ? WHERE idcomputadora = ?';
+    const sql = 'UPDATE TComputadoras SET IdUsuario = ?, Nombre = ? WHERE IdComputadora = ?';
     conexion.query(sql, [idusuario, nombre, id], (err, result) => {
         if (err) {
             console.error("Error al actualizar computadora:", err);
@@ -52,7 +57,7 @@ router.put('/Computadoras/:id', (req, res) => {
 
 router.delete('/Computadoras/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TComputadoras SET estado = 0 WHERE idcomputadora = ?';
+    const sql = 'UPDATE TComputadoras SET Estado = 0 WHERE IdComputadora = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Error al eliminar computadora:", err);

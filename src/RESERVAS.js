@@ -11,20 +11,36 @@ router.get('/reservas', (req, res) => {
 });
 
 router.post('/reservas', (req, res) => {
-    const { idusuario, fechareserva, pago, estado } = req.body;
-    const data = { idusuario, fechareserva, pago, estado, estado_logico: 1 };
+    const { IdUsuario, FechaReserva, Pago, Estado } = req.body;
+
+    if (!IdUsuario || !FechaReserva || Pago === undefined || !Estado) {
+        return res.status(400).send('Faltan campos obligatorios');
+    }
+
+    const data = {
+        IdUsuario: IdUsuario,
+        FechaReserva: FechaReserva,
+        Pago: Pago,
+        Estado: Estado,
+        EstadoLogico: 1
+    };
+
     const sqlInsert = 'INSERT INTO TReservas SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
-        if (err) return res.status(500).send('Error al insertar reserva');
+        if (err) {
+            console.error("Error al insertar reserva:", err);
+            return res.status(500).send('Error al insertar reserva');
+        }
         res.json({ message: 'Reserva agregada correctamente', id: result.insertId });
     });
 });
 
+
 router.put('/reservas/:id', (req, res) => {
     const id = req.params.id;
-    const { idusuario, fechareserva, pago, estado } = req.body;
-    const sql = 'UPDATE TReservas SET idusuario = ?, fechareserva = ?, pago = ?, estado = ? WHERE idreserva = ?';
-    conexion.query(sql, [idusuario, fechareserva, pago, estado, id], (err) => {
+    const { IdUsuario, FechaReserva, Pago, Estado } = req.body;
+    const sql = 'UPDATE TReservas SET IdUsuario = ?, FechaReserva = ?, Pago = ?, Estado = ? WHERE IdReserva = ?';
+    conexion.query(sql, [IdUsuario, FechaReserva, Pago, Estado, id], (err) => {
         if (err) return res.status(500).send('Error al actualizar reserva');
         res.json({ message: 'Reserva actualizada correctamente' });
     });
@@ -32,7 +48,7 @@ router.put('/reservas/:id', (req, res) => {
 
 router.delete('/reservas/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TReservas SET estado_logico = 0 WHERE idreserva = ?';
+    const sql = 'UPDATE TReservas SET EstadoLogico = 0 WHERE IdReserva = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar reserva');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Reserva no encontrada' });

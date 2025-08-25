@@ -11,28 +11,49 @@ router.get('/usuarios', (req, res) => {
 });
 
 router.post('/usuarios', (req, res) => {
-    const { idrol, nombre, apellido1, correo, contrasena, estado } = req.body;
-    const data = { idrol, nombre, apellido1, correo, contrasena, estado, estado_logico: 1 };
+    const { IdRol, Nombre, Apellido1, Correo, Contraseña, Estado } = req.body;
+
+    const data = {
+        IdRol,
+        Nombre,
+        Apellido1,
+        Correo,
+        Contraseña,
+        Estado,
+        EstadoLogico: 1
+    };
+
     const sqlInsert = 'INSERT INTO TUsuarios SET ?';
     conexion.query(sqlInsert, data, (err, result) => {
-        if (err) return res.status(500).send('Error al insertar usuario');
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error al insertar usuario');
+        }
         res.json({ message: 'Usuario agregado correctamente', id: result.insertId });
     });
 });
 
 router.put('/usuarios/:id', (req, res) => {
     const id = req.params.id;
-    const { idrol, nombre, apellido1, correo, contrasena, estado } = req.body;
-    const sql = 'UPDATE TUsuarios SET idrol = ?, nombre = ?, apellido1 = ?, correo = ?, contrasena = ?, estado = ? WHERE idusuario = ?';
-    conexion.query(sql, [idrol, nombre, apellido1, correo, contrasena, estado, id], (err) => {
-        if (err) return res.status(500).send('Error al actualizar usuario');
+    const { IdRol, Nombre, Apellido1, Correo, Contraseña, Estado } = req.body;
+
+    const sql = `
+        UPDATE TUsuarios 
+        SET IdRol = ?, Nombre = ?, Apellido1 = ?, Correo = ?, Contraseña = ?, Estado = ? 
+        WHERE IdUsuario = ?
+    `;
+    conexion.query(sql, [IdRol, Nombre, Apellido1, Correo, Contraseña, Estado, id], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error al actualizar usuario');
+        }
         res.json({ message: 'Usuario actualizado correctamente' });
     });
 });
 
 router.delete('/usuarios/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TUsuarios SET estado_logico = 0 WHERE idusuario = ?';
+    const sql = 'UPDATE TUsuarios SET EstadoLogico = 0 WHERE IdUsuario = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar usuario');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Usuario no encontrado' });
