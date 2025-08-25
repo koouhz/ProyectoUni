@@ -12,15 +12,13 @@ router.get('/reservas', (req, res) => {
 
 router.post('/reservas', (req, res) => {
     const { idusuario, fechareserva, pago, estado } = req.body;
-    const sqlSelect = 'SELECT IFNULL(MAX(idreserva), 0) + 1 AS nuevoId FROM TReservas';
-    conexion.query(sqlSelect, (err, result) => {
-        if (err) return res.status(500).send('Error al generar nuevo id');
-        const nuevoId = result[0].nuevoId;
-        const data = { idreserva: nuevoId, idusuario, fechareserva, pago, estado };
-        const sqlInsert = 'INSERT INTO TReservas SET ?';
-        conexion.query(sqlInsert, data, (err2) => {
-            if (err2) return res.status(500).send('Error al insertar reserva');
-            res.json({ message: 'Reserva agregada correctamente', id: nuevoId });
+    const data = { idusuario, fechareserva, pago, estado };
+    const sqlInsert = 'INSERT INTO TReservas SET ?';
+    conexion.query(sqlInsert, data, (err, result) => {
+        if (err) return res.status(500).send('Error al insertar reserva');
+        res.json({ 
+            message: 'Reserva agregada correctamente', 
+            id: result.insertId 
         });
     });
 });
@@ -37,7 +35,7 @@ router.put('/reservas/:id', (req, res) => {
 
 router.delete('/reservas/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TReservas SET estadologico = 0 WHERE idreserva = ?';
+    const sql = 'UPDATE TReservas SET estado = 0 WHERE idreserva = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar reserva');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Reserva no encontrada' });

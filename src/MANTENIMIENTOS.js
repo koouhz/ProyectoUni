@@ -12,15 +12,13 @@ router.get('/mantenimientos', (req, res) => {
 
 router.post('/mantenimientos', (req, res) => {
     const { idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado } = req.body;
-    const sqlSelect = 'SELECT IFNULL(MAX(idmantenimiento), 0) + 1 AS nuevoId FROM TMantenimientos';
-    conexion.query(sqlSelect, (err, result) => {
-        if (err) return res.status(500).send('Error al generar nuevo id');
-        const nuevoId = result[0].nuevoId;
-        const data = { idmantenimiento: nuevoId, idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado };
-        const sqlInsert = 'INSERT INTO TMantenimientos SET ?';
-        conexion.query(sqlInsert, data, (err2) => {
-            if (err2) return res.status(500).send('Error al insertar mantenimiento');
-            res.json({ message: 'Mantenimiento agregado correctamente', id: nuevoId });
+    const data = { idcomputadora, idusuario, fechaprogramada, fecharealizada, costototal, estado };
+    const sqlInsert = 'INSERT INTO TMantenimientos SET ?';
+    conexion.query(sqlInsert, data, (err, result) => {
+        if (err) return res.status(500).send('Error al insertar mantenimiento');
+        res.json({ 
+            message: 'Mantenimiento agregado correctamente', 
+            id: result.insertId 
         });
     });
 });
@@ -37,7 +35,7 @@ router.put('/mantenimientos/:id', (req, res) => {
 
 router.delete('/mantenimientos/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TMantenimientos SET estadologico = 0 WHERE idmantenimiento = ?';
+    const sql = 'UPDATE TMantenimientos SET estado = 0 WHERE idmantenimiento = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar mantenimiento');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Mantenimiento no encontrado' });

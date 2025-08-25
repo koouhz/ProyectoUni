@@ -12,15 +12,13 @@ router.get('/ensambles', (req, res) => {
 
 router.post('/ensambles', (req, res) => {
     const { idusuariotecnico, idusuariocliente, fechafin, costototal, estado } = req.body;
-    const sqlSelect = 'SELECT IFNULL(MAX(idensamble), 0) + 1 AS nuevoId FROM TEnsambles';
-    conexion.query(sqlSelect, (err, result) => {
-        if (err) return res.status(500).send('Error al generar nuevo id');
-        const nuevoId = result[0].nuevoId;
-        const data = { idensamble: nuevoId, idusuariotecnico, idusuariocliente, fechafin, costototal, estado };
-        const sqlInsert = 'INSERT INTO TEnsambles SET ?';
-        conexion.query(sqlInsert, data, (err2) => {
-            if (err2) return res.status(500).send('Error al insertar ensamble');
-            res.json({ message: 'Ensamble agregado correctamente', id: nuevoId });
+    const data = { idusuariotecnico, idusuariocliente, fechafin, costototal, estado };
+    const sqlInsert = 'INSERT INTO TEnsambles SET ?';
+    conexion.query(sqlInsert, data, (err, result) => {
+        if (err) return res.status(500).send('Error al insertar ensamble');
+        res.json({ 
+            message: 'Ensamble agregado correctamente', 
+            id: result.insertId 
         });
     });
 });
@@ -37,7 +35,7 @@ router.put('/ensambles/:id', (req, res) => {
 
 router.delete('/ensambles/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TEnsambles SET estadologico = 0 WHERE idensamble = ?';
+    const sql = 'UPDATE TEnsambles SET estado = 0 WHERE idensamble = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar ensamble');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Ensamble no encontrado' });

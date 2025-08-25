@@ -3,7 +3,7 @@ const router = express.Router();
 const conexion = require('./config/connection');
 
 router.get('/Componentes', (req, res) => {
-    const sql = 'SELECT * FROM TComponentes WHERE estadologico = 1';
+    const sql = 'SELECT * FROM TComponentes WHERE estado = 1';
     conexion.query(sql, (err, result) => {
         if (err) {
             console.error("Error al consultar TComponentes:", err);
@@ -13,42 +13,33 @@ router.get('/Componentes', (req, res) => {
     });
 });
 
-
 router.post('/Componentes', (req, res) => {
     const { idcategoria, nombre, stockdisponible, costounitario, stockdanado, stockenuso, stockusado } = req.body;
-    const sqlSelect = 'SELECT IFNULL(MAX(idcomponente), 0) + 1 AS nuevoId FROM TComponentes';
-    conexion.query(sqlSelect, (err, result) => {
+
+    const data = {
+        idcategoria,
+        nombre,
+        stockdisponible: stockdisponible || 0,
+        costounitario: costounitario || 0.00,
+        stockdanado: stockdanado || 0,
+        stockenuso: stockenuso || 0,
+        stockusado: stockusado || 0,
+        estado: 1,
+        fecharegistro: new Date()
+    };
+
+    const sqlInsert = 'INSERT INTO TComponentes SET ?';
+    conexion.query(sqlInsert, data, (err, result) => {
         if (err) {
-            console.error("Error al obtener último idcomponente:", err);
+            console.error("Error al insertar componente:", err);
             return res.status(500).send("Error en el servidor");
         }
 
-        const nuevoId = result[0].nuevoId;
+        const nuevoId = result.insertId;
 
-        const data = {
-            idcomponente: nuevoId,
-            idcategoria,
-            nombre,
-            stockdisponible: stockdisponible || 0,
-            costounitario: costounitario || 0.00,
-            stockdanado: stockdanado || 0,
-            stockenuso: stockenuso || 0,
-            stockusado: stockusado || 0,
-            estadologico: 1,
-            fecharegistro: new Date()
-        };
-
-        const sqlInsert = 'INSERT INTO TComponentes SET ?';
-        conexion.query(sqlInsert, data, (err2, result2) => {
-            if (err2) {
-                console.error("Error al insertar componente:", err2);
-                return res.status(500).send("Error en el servidor");
-            }
-
-            res.json({ 
-                message: "Componente agregado correctamente",
-                id: nuevoId 
-            });
+        res.json({ 
+            message: "Componente agregado correctamente",
+            id: nuevoId 
         });
     });
 });
@@ -74,7 +65,7 @@ router.put('/Componentes/:id', (req, res) => {
 
 router.delete('/Componentes/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TComponentes SET estadologico = 0 WHERE idcomponente = ?';
+    const sql = 'UPDATE TComponentes SET estado = 0 WHERE idcomponente = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) {
             console.error("Error al eliminar componente:", err);

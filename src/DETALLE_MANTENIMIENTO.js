@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('./config/connection');
 
-router.get('/detallesmantenimiento', (req, res) => {
+router.get('/detalle_mantenimiento', (req, res) => {
     const sql = 'SELECT * FROM TDetalleMantenimiento';
     conexion.query(sql, (err, result) => {
         if (err) return res.status(500).send('Error en la consulta de TDetalleMantenimiento');
@@ -10,22 +10,20 @@ router.get('/detallesmantenimiento', (req, res) => {
     });
 });
 
-router.post('/detallesmantenimiento', (req, res) => {
+router.post('/detalle_mantenimiento', (req, res) => {
     const { idmantenimiento, idcomponente } = req.body;
-    const sqlSelect = 'SELECT IFNULL(MAX(iddetalle), 0) + 1 AS nuevoId FROM TDetalleMantenimiento';
-    conexion.query(sqlSelect, (err, result) => {
-        if (err) return res.status(500).send('Error al generar nuevo id');
-        const nuevoId = result[0].nuevoId;
-        const data = { iddetalle: nuevoId, idmantenimiento, idcomponente };
-        const sqlInsert = 'INSERT INTO TDetalleMantenimiento SET ?';
-        conexion.query(sqlInsert, data, (err2) => {
-            if (err2) return res.status(500).send('Error al insertar detalle de mantenimiento');
-            res.json({ message: 'Detalle de mantenimiento agregado correctamente', id: nuevoId });
+    const data = { idmantenimiento, idcomponente };
+    const sqlInsert = 'INSERT INTO TDetalleMantenimiento SET ?';
+    conexion.query(sqlInsert, data, (err, result) => {
+        if (err) return res.status(500).send('Error al insertar detalle de mantenimiento');
+        res.json({ 
+            message: 'Detalle de mantenimiento agregado correctamente', 
+            id: result.insertId 
         });
     });
 });
 
-router.put('/detallesmantenimiento/:id', (req, res) => {
+router.put('/detalle_mantenimiento/:id', (req, res) => {
     const id = req.params.id;
     const { idmantenimiento, idcomponente } = req.body;
     const sql = 'UPDATE TDetalleMantenimiento SET idmantenimiento = ?, idcomponente = ? WHERE iddetalle = ?';
@@ -35,9 +33,9 @@ router.put('/detallesmantenimiento/:id', (req, res) => {
     });
 });
 
-router.delete('/detallesmantenimiento/:id', (req, res) => {
+router.delete('/detalle_mantenimiento/:id', (req, res) => {
     const id = req.params.id;
-    const sql = 'UPDATE TDetalleMantenimiento SET estadologico = 0 WHERE iddetalle = ?';
+    const sql = 'UPDATE TDetalleMantenimiento SET estado = 0 WHERE iddetalle = ?';
     conexion.query(sql, [id], (err, result) => {
         if (err) return res.status(500).send('Error al eliminar detalle de mantenimiento');
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Detalle de mantenimiento no encontrado' });
